@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "gdb",
+            "request": "attach",
+            "name": "QEMU aarch64",
+            "remote": true,
+            "target": ":1234",
+            "executable": "./build/artkrnl/grubiso/sys/artkrnl",
+            "cwd": "${workspaceRoot}",
+            "autorun": [
+                "set output-radix 16"
+            ],
+            "gdbpath": "/bin/aarch64-linux-gnu-gdb",
+            "preLaunchTask": "qemu-system-aarch64",
+            "postDebugTask": "qemu-system-cleanup",
+            "stopAtConnect": false,
+            "showDevDebugOutput": false,
+            "valuesFormatting": "prettyPrinters"
+        },
+        {
+            "type": "gdb",
+            "request": "attach",
+            "name": "QEMU x86_64",
+            "remote": true,
+            "target": ":1234",
+            "executable": "./build/artkrnl/grubiso/sys/artkrnl",
+            "cwd": "${workspaceRoot}",
+            "gdbpath": "/bin/gdb",
+            "preLaunchTask": "qemu-system-x86_64",
+            "postDebugTask": "qemu-system-cleanup",
+            "stopAtConnect": false,
+            "showDevDebugOutput": true
+        }
+    ]
+}

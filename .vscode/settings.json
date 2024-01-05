@@ -1,0 +1,41 @@
+{
+    "files.associations": {
+        "*.txt": "plaintext",
+        "compare": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "variant": "cpp",
+        "chrono": "cpp",
+        "typeinfo": "cpp",
+        "string_view": "cpp",
+        "exception": "cpp",
+        "memory_resource": "cpp",
+        "fstream": "cpp",
+        "iosfwd": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp",
+        "stop_token": "cpp",
+        "streambuf": "cpp",
+        "*.rh": "cpp",
+        "bit": "cpp",
+        "random": "cpp",
+        "mutex": "cpp",
+        "valarray": "cpp",
+        "cstdarg": "cpp",
+        "*.ipp": "cpp",
+        "typeindex": "cpp"
+    },
+    "C_Cpp.default.includePath": [
+        "./",
+        "./include",
+        "./arch/x86_64/none/include",
+        "./arch/x86_64/pc/include"
+    ]
+}

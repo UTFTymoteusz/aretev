@@ -1,0 +1,40 @@
+#include "art/mm.hpp"
+
+namespace art::mm {
+    extern phys_t b_boot_text_start;
+    extern addr_t b_boot_text_vstart;
+    extern phys_t b_boot_text_end;
+    extern addr_t b_boot_text_vend;
+    extern phys_t b_boot_rodata_start;
+    extern addr_t b_boot_rodata_vstart;
+    extern phys_t b_boot_rodata_end;
+    extern addr_t b_boot_rodata_vend;
+    extern phys_t b_boot_data_start;
+    extern addr_t b_boot_data_vstart;
+    extern phys_t b_boot_data_end;
+    extern addr_t b_boot_data_vend;
+    extern phys_t b_boot_bss_start;
+    extern addr_t b_boot_bss_vstart;
+    extern phys_t b_boot_bss_end;
+    extern addr_t b_boot_bss_vend;
+    extern phys_t b_kernel_text_start;
+    extern addr_t b_kernel_text_vstart;
+    extern phys_t b_kernel_text_end;
+    extern addr_t b_kernel_text_vend;
+    extern phys_t b_kernel_rodata_start;
+    extern addr_t b_kernel_rodata_vstart;
+    extern phys_t b_kernel_rodata_end;
+    extern addr_t b_kernel_rodata_vend;
+    extern phys_t b_kernel_data_start;
+    extern addr_t b_kernel_data_vstart;
+    extern phys_t b_kernel_data_end;
+    extern addr_t b_kernel_data_vend;
+    extern phys_t b_kernel_bss_start;
+    extern addr_t b_kernel_bss_vstart;
+    extern phys_t b_kernel_bss_end;
+    extern addr_t b_kernel_bss_vend;
+    extern phys_t b_kernel_init_start;
+    extern addr_t b_kernel_init_vstart;
+    extern phys_t b_kernel_init_end;
+    extern addr_t b_kernel_init_vend;
+}
