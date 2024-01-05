@@ -1,0 +1,6 @@
+[submodule "lib/libafxelf"]
+	path = lib/libafxelf
+	url = https://github.com/UTFTymoteusz/libafxelf.git
+[submodule "lib/libafxheap"]
+	path = lib/libafxheap
+	url = https://github.com/UTFTymoteusz/libafxheap.git
