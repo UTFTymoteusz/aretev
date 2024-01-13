@@ -4,6 +4,7 @@
 #include "art/core.hpp"
 #include "art/sys.hpp"
 
+#include "afx/dt.h"
 #include "arch/x86_64/pc/dev/chr/16650/tts.hpp"
 #include "dev/chr/tty/vtty.hpp"
 #include "sys/sys.hpp"
@@ -26,19 +27,18 @@ namespace art::dev {
     }
 
     void iterate_fdt(void* fdt) {
-        sys::fdt      parsed;
-        sys::fdt_node root;
-        sys::fdt_node node;
+        afx::fdt      parsed;
+        afx::fdt_node root;
+        afx::fdt_node node;
 
-        sys::fdt_parse(&parsed, fdt);
-        sys::fdt_rootnode(&parsed, &root);
+        afx::fdt_parse(&parsed, fdt);
+        afx::fdt_rootnode(&parsed, &root);
 
-        if (!sys::fdt_firstnode(&parsed, &node, &root))
+        if (!afx::fdt_firstnode(&parsed, &node, &root))
             return;
 
         do {
             node = node;
-            //
-        } while (sys::fdt_nextnode(&parsed, &node, &node));
+        } while (afx::fdt_nextnode(&parsed, &node, &node));
     }
 }

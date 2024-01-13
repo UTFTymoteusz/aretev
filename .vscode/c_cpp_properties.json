@@ -5,6 +5,7 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}/include/",
+                "${workspaceFolder}/lib/libafxdt/include",
                 "${workspaceFolder}/lib/libafxelf/include",
                 "${workspaceFolder}/lib/libafxheap/include"
             ],

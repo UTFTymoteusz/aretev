@@ -4,3 +4,6 @@
 [submodule "lib/libafxheap"]
 	path = lib/libafxheap
 	url = https://github.com/UTFTymoteusz/libafxheap.git
+[submodule "lib/libafxdt"]
+	path = lib/libafxdt
+	url = https://github.com/UTFTymoteusz/libafxdt.git

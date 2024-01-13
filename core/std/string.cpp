@@ -164,12 +164,14 @@ namespace art {
         return mem;
     }
 
-    void memcpy(void* dst, const void* src, usz size) {
+    void* memcpy(void* dst, const void* src, usz size) {
         u8* dst_b = (u8*) dst;
         u8* src_b = (u8*) src;
 
         for (usz i = 0; i < size; i++)
             dst_b[i] = src_b[i];
+
+        return dst;
     }
 
     int memcmp(const void* a, const void* b, usz num) {

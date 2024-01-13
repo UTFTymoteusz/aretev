@@ -30,7 +30,10 @@
         "valarray": "cpp",
         "cstdarg": "cpp",
         "*.ipp": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "__node_handle": "cpp",
+        "cstring": "cpp",
+        "atomic": "cpp"
     },
     "C_Cpp.default.includePath": [
         "./",

@@ -72,7 +72,7 @@ namespace art {
     void* memset16(void* mem, u16 val, usz count);
     void* memset32(void* mem, u32 val, usz count);
     void* memset64(void* mem, u64 val, usz count);
-    void  memcpy(void* dst, const void* src, usz size);
+    void* memcpy(void* dst, const void* src, usz size);
     int   memcmp(const void* a, const void* b, usz num);
 
     // inline char tolower(char c) {

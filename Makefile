@@ -1,16 +1,21 @@
 TARGET ?= $(shell cat cfg/target)
 HOST   := $(shell echo ${TARGET} | sed 's/-/\//')
 ARCH   := $(shell echo ${HOST} | grep -Po '^[^/]+')
+LIBS   := libafxdt libafxelf libafxheap
 
 include cfg/${ARCH}/none.cfg
 include cfg/${HOST}.cfg
 
 MKDIR = mkdir -p
 
+ROOT     ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN      := ./build/artkrnl/
 BOOT     := boot/
 DEP_DEST := $(BIN)dep/
 OBJ_DEST := $(BIN)obj/
+
+export ROOT
+export CXX
 
 CXXFILES  := $(shell find . -type f -name '*.cpp' -not -path './arch/*' -not -path './mod/*' -not -path './lib/*')  \
 	$(shell find './arch/stub/.' -type f -name '*.cpp') \
@@ -30,10 +35,8 @@ ASMRFILES := $(shell find . -type f -name '*.asmr' -not -path './arch/*' -not -p
 	$(shell find './arch/$(HOST)/.' -type f -name '*.asmr' -not -path './arch/$(HOST)/./mod/*') \
 	$(shell find './arch/$(ARCH)/none/.' -type f -name '*.asmr' -not -path './arch/$(ARCH)/none/./mod/*')
 
-LIBS := ./build/libafxheap/libafxheap.a \
-		./build/libafxelf/libafxelf.a
-
 OBJS    := $(patsubst %.o, $(OBJ_DEST)%.o, $(CXXFILES:.cpp=.cpp.o) $(ASMFILES:.asm=.asm.o) $(PSFFILES:.psf=.psf.o) $(ASMRFILES:.asmr=.asmr.o))
+LINKS   := $(foreach lib,$(LIBS),./build/$(lib)/$(lib).a )
 VERSION := $(shell date -u '+%d.%m.%Y').$(shell printf "%05d" $(shell date -d "1970-01-01 UTC $$(date -u +%T)" +%s))
 
 ISO := $(BIN)grubiso/
@@ -46,11 +49,9 @@ INCLUDES := -I. -Iinclude/	     \
 	-Iarch/$(HOST)/			     \
 	-Iarch/$(ARCH)/none/	     \
 	-Iarch/$(HOST)/include/	     \
-	-Iarch/$(ARCH)/none/include/ \
-	-Ilib/libafxheap/include/    \
-	-Ilib/libafxelf/include/
+	-Iarch/$(ARCH)/none/include/
 
-KERNEL_SRC := $(shell pwd)/
+INCLUDES += $(foreach lib,$(LIBS),-I./lib/$(lib)/include )
 
 CXXFLAGS := $(GFLAGS) $(CXXFLAGS) \
 	-std=c++20				      \
@@ -68,20 +69,18 @@ CXXFLAGS := $(GFLAGS) $(CXXFLAGS) \
 
 LDFLAGS := $(GFLAGS) $(LDFLAGS)	\
 	-no-pie
-	
+
+define submake
+	$(MAKE) -C $(1) $(2)
+
+endef
+
 all: $(OBJS)	
 	@$(MKDIR) $(ISO) $(SYS)
 
-	cd lib/ && $(MAKE) all CC="$(CC)" CXX="$(CXX)" LD="$(LD)"
+	$(foreach lib,$(LIBS),$(call submake, ./lib/$(lib), all))
 
-#	@cd mod/core && $(MAKE) all ROOT_DIR="$(ROOT_DIR)" KERNEL_SRC="$(KERNEL_SRC)" && cd ../..
-#	@cd mod/init && $(MAKE) all ROOT_DIR="$(ROOT_DIR)" KERNEL_SRC="$(KERNEL_SRC)" && cd ../..
-#	@cd arch/$(ARCH)/mod/core && $(MAKE) all ROOT_DIR="$(ROOT_DIR)" KERNEL_SRC="$(KERNEL_SRC)" && cd ../../../..
-#	@cd arch/$(ARCH)/mod/init && $(MAKE) all ROOT_DIR="$(ROOT_DIR)" KERNEL_SRC="$(KERNEL_SRC)" && cd ../../../..
-
-	@$(CXX) $(OBJS) $(LDFLAGS) -T arch/$(HOST)/link.ld $(LIBS) -o $(SYS)artkrnl
-#	@cp $(SYS)artkrnl artsyms
-#	@strip $(SYS)artkrnl
+	@$(CXX) $(OBJS) $(LDFLAGS) -T arch/$(HOST)/link.ld $(LINKS) -o $(SYS)artkrnl
 
 	@printf '\033[0;36m%s\033[0m: Done building for \033[0;36m%s\033[0m\033[0K\n' artkrnl $(shell echo ${HOST} | sed 's/\//-/')
 
@@ -95,13 +94,7 @@ iso: all
 	grub-mkrescue -o /tmp/art.iso $(ISO)
 
 clean:
-	cd lib/ && $(MAKE) clean
-
-#	cd mod/core && $(MAKE) clean && cd ../..
-#	cd mod/init && $(MAKE) clean && cd ../..
-
-#	cd arch/$(ARCH)/mod/core && $(MAKE) clean && cd ../../../..
-#	cd arch/$(ARCH)/mod/init && $(MAKE) clean && cd ../../../..
+	$(foreach lib,$(LIBS),$(call submake, ./lib/$(lib), clean))
 
 	rm -rf $(DEP_DEST)
 	rm -rf $(OBJ_DEST)
