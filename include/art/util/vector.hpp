@@ -44,7 +44,7 @@ namespace art {
         }
 
         private:
-        T*  _array;
-        usz _count;
+        T*  _array = nullptr;
+        usz _count = 0;
     };
 }

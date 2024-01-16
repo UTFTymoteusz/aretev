@@ -63,6 +63,11 @@ namespace art {
         static void interrupts();
 
         /**
+         * @brief Toggles interrupts on the local CPU.
+         */
+        static void interrupts(bool interrupts);
+
+        /**
          * @brief Checks if interrupts are enabled on the local CPU.
          */
         static bool check_interrupts();

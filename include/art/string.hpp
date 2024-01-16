@@ -75,6 +75,17 @@ namespace art {
     void* memcpy(void* dst, const void* src, usz size);
     int   memcmp(const void* a, const void* b, usz num);
 
+    template <typename T>
+    void strtok_iterate(const char* str, const char* delim, T callback) {
+        char        buffer[256];
+        const char* ptr = nullptr;
+        char*       token;
+
+        while ((token =
+                    strntokp_r(buffer, sizeof(buffer), ptr ? nullptr : str, delim, &ptr)))
+            callback(token);
+    }
+
     // inline char tolower(char c) {
     //     return inrange(c, 'A', 'Z') ? c + 32 : c;
     // }

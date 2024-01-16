@@ -40,6 +40,10 @@ namespace art {
         asm volatile("msr daif, x9;");
     }
 
+    void cpu::interrupts(bool interrupts) {
+        interrupts ? cpu::interrupts() : cpu::no_interrupts();
+    }
+
     bool cpu::check_interrupts() {
         usz flags;
 

@@ -3,26 +3,29 @@
 #include "art/data.hpp"
 #include "art/proc/lock.hpp"
 #include "art/sys/types.hpp"
+#include "art/util.hpp"
 
 namespace art::sys {
     /**
      * @brief A class that represents a physical device.
      * This class is intended to only describe a device.
      */
-    class device {
+    class devdesc {
         public:
-        char        name[16];
-        int         flags;
-        attribute** attributes;
+        char               name[32];
+        const char*        bus;
+        int                flags;
+        vector<attribute*> attributes;
+        devdesc*           parent = nullptr;
+        driver*            owner  = nullptr;
 
-        device(const char* name, int flags = 0);
-        virtual ~device();
+        devdesc(const char* name, int flags = 0);
+        virtual ~devdesc();
 
+        attribute*          push(attribute* attr);
         optional<attribute> attr(const char* name);
 
         protected:
-        attribute* push(attribute* attr);
-
         private:
         proc::lock _lock;
         int        _attrcnt;

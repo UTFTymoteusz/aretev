@@ -2,6 +2,7 @@
 
 #include "art/errno.hpp"
 #include "art/int.hpp"
+#include "art/proc.hpp"
 #include "art/util.hpp"
 
 namespace art::dev {
@@ -43,8 +44,10 @@ namespace art::dev {
             this->error  = ENONE;
             this->result = result;
 
-            if (this->cb)
-                uninterruptible this->cb(this);
+            if (this->cb) {
+                proc::int_guard ig(false);
+                this->cb(this);
+            }
 
             this->completed = true;
         }
@@ -53,8 +56,10 @@ namespace art::dev {
             this->error  = error;
             this->result = 0;
 
-            if (this->cb)
-                uninterruptible this->cb(this);
+            if (this->cb) {
+                proc::int_guard ig(false);
+                this->cb(this);
+            }
 
             this->completed = true;
         }

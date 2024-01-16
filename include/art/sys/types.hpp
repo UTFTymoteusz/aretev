@@ -27,6 +27,7 @@ namespace art::sys {
         AT_INTEGER,
         AT_BOOL,
         AT_STRING,
+        AT_BYTES,
     };
 
     enum rsrctype {
@@ -43,6 +44,7 @@ namespace art::sys {
             const char* stringval;
             int         intval;
         };
+        bool strclean = false;
 
         attribute() {
             this->type = AT_INVALID;
@@ -55,11 +57,12 @@ namespace art::sys {
             this->boolval = val;
         }
 
-        attribute(const char* name, const char* val) {
+        attribute(const char* name, const char* val, bool clean = false) {
             strlcpy(this->name, name, sizeof(this->name));
 
             this->type      = AT_STRING;
             this->stringval = val;
+            this->strclean  = clean;
         }
 
         attribute(const char* name, int val) {
@@ -68,6 +71,11 @@ namespace art::sys {
             this->type    = AT_INTEGER;
             this->boolval = val;
         }
+
+        ~attribute() {
+            if (this->strclean)
+                delete stringval;
+        }
     };
 
     struct resource {
@@ -75,5 +83,6 @@ namespace art::sys {
         u64      start, end;
     };
 
-    class device;
+    class devdesc;
+    class driver;
 }

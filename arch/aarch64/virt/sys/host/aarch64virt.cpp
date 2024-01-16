@@ -5,7 +5,7 @@
 namespace art::arch::sys {
     using namespace art::sys;
 
-    aarch64virt::aarch64virt() : device("aarch64virt") {
+    aarch64virt::aarch64virt() : devdesc("aarch64virt") {
         this->push(new attribute("arch", "aarch64"));
         this->push(new attribute("machine", "virt"));
     }

@@ -1,6 +1,7 @@
 #include "art/dev/chr/tty.hpp"
 
 #include "art/core.hpp"
+#include "art/proc.hpp"
 
 namespace art::dev {
     tty::tty(const char* name, int flags) : chrdev(name, flags | DV_MQUEUE | DV_TTY) {
@@ -16,7 +17,8 @@ namespace art::dev {
         def.c_cflag = 0;
         def.c_lflag = ICANON;
 
-        locking(this->_lock) {
+        {
+            proc::lock_guard lg(this->_lock);
             this->update(def, true);
         }
     }
@@ -24,22 +26,22 @@ namespace art::dev {
     tty::~tty() {}
 
     void tty::begin(iopkt* packet) {
-        uninterruptible {
-            if (packet->cmd == IO_READ) {
-                this->_rvecman.aim(packet->iov, packet->iovcnt, packet->len);
-                this->_rbuffer.set(0, 0);
-                this->_rpkt = packet;
-                this->_roff = 0;
-                this->iocheck();
-            }
-            else if (packet->cmd == IO_WRITE) {
-                this->_wvecman.aim(packet->iov, packet->iovcnt, packet->len);
-                this->_wbuffer.set(0, 0);
-                this->_wpkt = packet;
-                this->_woff = 0;
-                this->_wdbl = 0;
-                this->iocheck();
-            }
+        proc::int_guard ig(false);
+
+        if (packet->cmd == IO_READ) {
+            this->_rvecman.aim(packet->iov, packet->iovcnt, packet->len);
+            this->_rbuffer.set(0, 0);
+            this->_rpkt = packet;
+            this->_roff = 0;
+            this->iocheck();
+        }
+        else if (packet->cmd == IO_WRITE) {
+            this->_wvecman.aim(packet->iov, packet->iovcnt, packet->len);
+            this->_wbuffer.set(0, 0);
+            this->_wpkt = packet;
+            this->_woff = 0;
+            this->_wdbl = 0;
+            this->iocheck();
         }
     }
 
@@ -50,7 +52,10 @@ namespace art::dev {
     void tty::irq() {
         tty::tty_irq();
 
-        locking(this->_lock) this->iocheck();
+        {
+            proc::lock_guard lg(this->_lock);
+            this->iocheck();
+        }
     }
 
     error_t tty::tty_init() {

@@ -45,4 +45,32 @@ namespace art {
             return value;
         }
     };
+
+    template <typename T, typename U>
+    constexpr bool find_if(T first, T last, U matcher) {
+        for (T val = first; val < last; val++)
+            if (matcher(*val))
+                return true;
+
+        return false;
+    }
+
+    template <typename T, typename U>
+    constexpr bool find_if(T iterable, U matcher) {
+        return find_if(iterable.begin(), iterable.end(), matcher);
+    }
+
+    template <typename T, typename U>
+    constexpr bool find_if_not(T first, T last, U matcher) {
+        for (T val = first; val < last; val++)
+            if (!matcher(*val))
+                return true;
+
+        return false;
+    }
+
+    template <typename T, typename U>
+    constexpr bool find_if_not(T iterable, U matcher) {
+        return find_if_not(iterable.begin(), iterable.end(), matcher);
+    }
 }

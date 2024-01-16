@@ -33,7 +33,11 @@
         "typeindex": "cpp",
         "__node_handle": "cpp",
         "cstring": "cpp",
-        "atomic": "cpp"
+        "atomic": "cpp",
+        "locale": "cpp",
+        "*.inc": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.default.includePath": [
         "./",

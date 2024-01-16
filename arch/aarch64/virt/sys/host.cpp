@@ -3,8 +3,8 @@
 #include "arch/aarch64/virt/sys/host/aarch64virt.hpp"
 
 namespace art::arch::sys {
-    art::sys::device* create_host() {
-        art::sys::device* host = new aarch64virt();
+    art::sys::devdesc* create_host() {
+        art::sys::devdesc* host = new aarch64virt();
 
         return host;
     }

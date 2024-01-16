@@ -34,30 +34,31 @@ namespace art::dev {
     }
 
     error_t device::submit(iopkt* packet) {
-        uninterruptible locking(this->_lock) {
-            if (this->flags & DV_SYNC) {
-                this->begin(packet);
-            }
-            else if (this->flags & DV_MQUEUE) {
-                switch (packet->cmd) {
-                case IO_READ:
-                    if (this->_rqueue->push(packet))
-                        this->begin(packet);
-                    break;
-                case IO_WRITE:
-                    if (this->_wqueue->push(packet))
-                        this->begin(packet);
-                    break;
-                default:
-                    if (this->_queue->push(packet))
-                        this->begin(packet);
-                    break;
-                }
-            }
-            else {
+        proc::lock_guard lg(this->_lock);
+        proc::int_guard  ig(false);
+
+        if (this->flags & DV_SYNC) {
+            this->begin(packet);
+        }
+        else if (this->flags & DV_MQUEUE) {
+            switch (packet->cmd) {
+            case IO_READ:
+                if (this->_rqueue->push(packet))
+                    this->begin(packet);
+                break;
+            case IO_WRITE:
+                if (this->_wqueue->push(packet))
+                    this->begin(packet);
+                break;
+            default:
                 if (this->_queue->push(packet))
                     this->begin(packet);
+                break;
             }
+        }
+        else {
+            if (this->_queue->push(packet))
+                this->begin(packet);
         }
 
         return ENONE;

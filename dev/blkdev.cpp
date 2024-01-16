@@ -1,5 +1,7 @@
 #include "art/dev/blkdev.hpp"
 
+#include "art/proc.hpp"
+
 namespace art::dev {
     blkdev::blkdev(const char* name, int flags) : device(name, flags | DV_BLOCK) {
         this->_queue->max_ongoing(-1);
@@ -8,12 +10,12 @@ namespace art::dev {
     blkdev::~blkdev() {}
 
     error_t blkdev::submit(iopkt* packet) {
-        locking(this->_lock) {
-            if (!this->_blkqueue.space())
-                this->_queue->push(packet);
-            else
-                this->convert(packet);
-        }
+        proc::lock_guard lg(this->_lock);
+
+        if (!this->_blkqueue.space())
+            this->_queue->push(packet);
+        else
+            this->convert(packet);
 
         return ENONE;
     }

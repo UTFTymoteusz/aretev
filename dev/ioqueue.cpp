@@ -1,17 +1,19 @@
 #include "art/dev/ioqueue.hpp"
 
 #include "art/mm.hpp"
+#include "art/proc.hpp"
 #include "art/util.hpp"
 
 namespace art::dev {
     ioqueue::ioqueue() {
-        uninterruptible this->max_ongoing(1);
+        proc::int_guard ig(false);
+        this->max_ongoing(1);
     }
 
     ioqueue::~ioqueue() {}
 
     bool ioqueue::push(iopkt* packet) {
-        guard(this->_lock, proc::lock);
+        proc::lock_guard lg(this->_lock);
 
         if (this->space())
             return true;
@@ -26,7 +28,7 @@ namespace art::dev {
     }
 
     iopkt* ioqueue::next() {
-        guard(this->_lock, proc::lock);
+        proc::lock_guard lg(this->_lock);
 
         iopkt* result = this->_queue.pop_front();
         if (!result)
@@ -38,7 +40,7 @@ namespace art::dev {
     }
 
     void ioqueue::completed(iopkt*) {
-        guard(this->_lock, proc::lock);
+        proc::lock_guard lg(this->_lock);
 
         this->_ongoing_cur--;
     }
@@ -53,7 +55,7 @@ namespace art::dev {
     }
 
     int ioqueue::space() {
-        guard(this->_lock, proc::lock);
+        proc::lock_guard lg(this->_lock);
         return this->_ongoing_max - this->_ongoing_cur;
     }
 }
