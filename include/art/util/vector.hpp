@@ -43,6 +43,10 @@ namespace art {
             return &this->_array[this->_count];
         }
 
+        T& operator[](int id) {
+            return this->_array[id];
+        }
+
         private:
         T*  _array = nullptr;
         usz _count = 0;

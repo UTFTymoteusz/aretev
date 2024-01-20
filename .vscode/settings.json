@@ -37,7 +37,11 @@
         "locale": "cpp",
         "*.inc": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "numbers": "cpp",
+        "map": "cpp",
+        "format": "cpp",
+        "__tree": "cpp"
     },
     "C_Cpp.default.includePath": [
         "./",

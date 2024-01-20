@@ -34,21 +34,28 @@ namespace art::sys {
         acpi::init();
     }
 
-    void iterate_fdt(void* fdt) {
-        afx::fdt      parsed;
-        afx::fdt_node root;
-        afx::fdt_node node;
+    void iterate_node(afx::fdt& parsed, afx::fdt_node& node) {
+        afx::fdt_node child;
+        afx::fdt_prop addr_cells;
+        afx::fdt_prop size_cells;
 
-        afx::fdt_parse(&parsed, fdt);
-        afx::fdt_rootnode(&parsed, &root);
-
-        if (!afx::fdt_firstnode(&parsed, &node, &root))
+        if (!afx::fdt_firstnode(&parsed, &child, &node))
             return;
+
+        afx::fdt_getprop(&parsed, &addr_cells, &node, "#address-cells");
+        afx::fdt_getprop(&parsed, &size_cells, &node, "#size-cells");
+
+        int addr_len = afx::fdt_getu32(&parsed, &addr_cells, 0);
+        int size_len = afx::fdt_getu32(&parsed, &size_cells, 0);
 
         do {
             afx::fdt_prop compatible;
+            afx::fdt_prop reg;
 
-            if (!afx::fdt_getprop(&parsed, &compatible, &node, "compatible"))
+            if (!afx::fdt_getprop(&parsed, &compatible, &child, "compatible"))
+                continue;
+
+            if (!afx::fdt_getprop(&parsed, &reg, &child, "reg"))
                 continue;
 
             char* buffer = new char[compatible.size];
@@ -57,14 +64,34 @@ namespace art::sys {
             for (usz i = 0; i < compatible.size - 1; i++)
                 buffer[i] = buffer[i] ?: ';';
 
-            auto devd = new sys::devdesc(node.name);
+            auto devd = new sys::devdesc(child.name);
 
             devd->bus    = "main";
             devd->parent = sys::host;
             devd->push(new sys::attribute("compatible", buffer, true));
 
+            for (int i = 0; i < reg.size; i += addr_len * 4 + size_len * 4) {
+                usz addr = addr_len == 1 ? afx::fdt_getu32(&parsed, &reg, i + 0)
+                                         : afx::fdt_getu64(&parsed, &reg, i + 0);
+                usz size = size_len == 1
+                               ? afx::fdt_getu32(&parsed, &reg, i + addr_len * 4)
+                               : afx::fdt_getu64(&parsed, &reg, i + addr_len * 4);
+
+                devd->push(resource(RS_MEMORY, addr, addr + size));
+            }
+
             sys::register_devdesc(devd);
-        } while (afx::fdt_nextnode(&parsed, &node, &node));
+        } while (afx::fdt_nextnode(&parsed, &child, &child));
+    }
+
+    void iterate_fdt(void* fdt) {
+        afx::fdt      parsed;
+        afx::fdt_node root;
+
+        afx::fdt_parse(&parsed, fdt);
+        afx::fdt_rootnode(&parsed, &root);
+
+        iterate_node(parsed, root);
     }
 
     error_t register_devdesc(sys::devdesc* devd) {

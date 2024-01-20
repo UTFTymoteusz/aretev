@@ -81,6 +81,14 @@ namespace art::sys {
     struct resource {
         rsrctype type;
         u64      start, end;
+
+        resource() {}
+
+        resource(rsrctype type, u64 start, u64 end) {
+            this->type  = type;
+            this->start = start;
+            this->end   = end;
+        }
     };
 
     class devdesc;

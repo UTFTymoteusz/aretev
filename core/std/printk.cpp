@@ -39,7 +39,7 @@ namespace art {
         stdout->submit(&packet);
 
         while (!packet.completed)
-            /*proc::thread::yield()*/;
+            proc::yield();
 
         buffer.exhausted();
     }

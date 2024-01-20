@@ -71,7 +71,7 @@ LDFLAGS := $(GFLAGS) $(LDFLAGS)	\
 	-no-pie
 
 define submake
-	$(MAKE) -C $(1) $(2)
+	@$(MAKE) -C $(1) $(2)
 
 endef
 

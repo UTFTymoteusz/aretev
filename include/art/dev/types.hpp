@@ -2,6 +2,7 @@
 
 #include "art/errno.hpp"
 #include "art/int.hpp"
+#include "art/mm.hpp"
 #include "art/proc.hpp"
 #include "art/util.hpp"
 
@@ -63,5 +64,25 @@ namespace art::dev {
 
             this->completed = true;
         }
+    };
+
+    template <typename T>
+    class regs {
+        public:
+        regs() {
+            this->_base = nullptr;
+        }
+
+        regs(phys_t paddr, usz len) {
+            this->_base =
+                mm::kernel_pg.map(paddr, len, nullptr, mm::PG_NOCACHE | mm::PG_RW);
+        }
+
+        constexpr T& operator[](int offset) {
+            return *((T*) (((char*) this->_base) + offset));
+        }
+
+        private:
+        void* _base;
     };
 }

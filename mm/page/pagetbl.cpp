@@ -44,7 +44,7 @@ namespace art::mm {
             present(art_flags & PG_PRESENT);
             ro(!(art_flags & PG_WRITE));
             rw(art_flags & PG_WRITE);
-            // nocache(art_flags & PG_NOCACHE);
+            nocache(art_flags & PG_NOCACHE);
             // global(art_flags & PG_GLOBAL);
         }
 
@@ -52,6 +52,7 @@ namespace art::mm {
         bit_access(ro, PN_RO);
         bit_access(rw, PN_RW);
         bit_access(user, PN_USER);
+        bit_access(nocache, PN_NOCACHE);
 #undef bit_access
     };
 

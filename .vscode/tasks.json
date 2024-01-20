@@ -24,7 +24,7 @@
             "type": "shell",
             "isBackground": true,
             "dependsOn": "build",
-            "command": "qemu-system-aarch64 -machine virt -monitor stdio -smp 1 -cpu cortex-a57 -m 128M -kernel './build/artkrnl/grubiso/sys/artkrnl' -serial vc -serial pipe:/tmp/guest -d guest_errors,int -s -S",
+            "command": "qemu-system-aarch64 -machine virt -monitor stdio -smp 1 -cpu cortex-a57 -m 128M -kernel './build/artkrnl/grubiso/sys/artkrnl' -d guest_errors,int -s -S",
             "problemMatcher": [
                 {
                     "pattern": [

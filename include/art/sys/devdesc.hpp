@@ -16,6 +16,7 @@ namespace art::sys {
         const char*        bus;
         int                flags;
         vector<attribute*> attributes;
+        vector<resource>   resources;
         devdesc*           parent = nullptr;
         driver*            owner  = nullptr;
 
@@ -23,7 +24,9 @@ namespace art::sys {
         virtual ~devdesc();
 
         attribute*          push(attribute* attr);
+        void                push(resource&& attr);
         optional<attribute> attr(const char* name);
+        optional<resource>  res(int id);
 
         protected:
         private:

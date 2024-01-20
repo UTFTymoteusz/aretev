@@ -31,5 +31,6 @@ namespace art::arch::mm {
         PN_RO      = (0b10 << 6),
         PN_RW      = (0b00 << 6),
         PN_USER    = (0b01 << 6),
+        PN_NOCACHE = (0b10 << 8),
     };
 }

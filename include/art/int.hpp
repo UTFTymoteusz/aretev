@@ -233,15 +233,30 @@ namespace art {
         }
 
         void set(T value) {
-            value = to_le(value);
+            this->value = to_le(value);
         }
 
         operator T() {
-            return get();
+            return this->get();
         }
 
-        le& operator=(const T& value) {
-            set(value);
+        le& operator=(const T value) {
+            this->set(value);
+            return *this;
+        }
+
+        le& operator|=(const T value) {
+            this->set(this->get() | value);
+            return *this;
+        }
+
+        le& operator&=(const T value) {
+            this->set(this->get() & value);
+            return *this;
+        }
+
+        le& operator^=(const T value) {
+            this->set(this->get() ^ value);
             return *this;
         }
     };
@@ -259,15 +274,30 @@ namespace art {
         }
 
         void set(T value) {
-            value = to_be(value);
+            this->value = to_be(value);
         }
 
         operator T() {
             return get();
         }
 
-        be& operator=(const T& value) {
-            set(value);
+        be& operator=(const T value) {
+            this->set(value);
+            return *this;
+        }
+
+        be& operator|=(const T value) {
+            this->set(get() | value);
+            return *this;
+        }
+
+        be& operator&=(const T value) {
+            set(get() & value);
+            return *this;
+        }
+
+        be& operator^=(const T value) {
+            set(get() ^ value);
             return *this;
         }
     };
