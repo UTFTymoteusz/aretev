@@ -10,8 +10,8 @@ namespace art::sys {
 
     driver::~driver() {}
 
-    bool driver::match(devdesc* devd) {
-        auto bus_match = [devd](const char* val) { return strcmp(val, devd->bus) == 0; };
+    bool driver::match(shptr<devdesc> devd) {
+        auto bus_match = [&devd](const char* val) { return strcmp(val, devd->bus) == 0; };
 
         if (find_if_not(this->_buses, bus_match))
             return false;

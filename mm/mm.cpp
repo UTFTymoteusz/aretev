@@ -8,10 +8,6 @@
 #include "mm/heap/heap.hpp"
 #include "mm/phys/phys.hpp"
 
-inline void* operator new(art::usz, void* ptr) {
-    return ptr;
-}
-
 namespace art::mm {
     pagetbl kernel_pg;
 

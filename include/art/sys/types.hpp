@@ -23,11 +23,12 @@ namespace art::sys {
     };
 
     enum attrtype {
-        AT_INVALID,
-        AT_INTEGER,
-        AT_BOOL,
-        AT_STRING,
-        AT_BYTES,
+        AT_INVALID,   // Invalid attribute type
+        AT_INTEGER,   // Integer attirbute type
+        AT_BOOL,      // Bool attribute type
+        AT_STRING,    // String attribute type
+        AT_BYTES,     // Generic data attribute type
+        AT_REFERENCE, // Devdesc reference attribute type
     };
 
     enum rsrctype {

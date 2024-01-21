@@ -1,9 +1,9 @@
 #pragma once
 
+#include "art/core.hpp"
 #include "art/data.hpp"
 #include "art/proc/lock.hpp"
 #include "art/sys/types.hpp"
-#include "art/util.hpp"
 
 namespace art::sys {
     /**
@@ -17,8 +17,8 @@ namespace art::sys {
         int                flags;
         vector<attribute*> attributes;
         vector<resource>   resources;
-        devdesc*           parent = nullptr;
-        driver*            owner  = nullptr;
+        shptr<devdesc>     parent;
+        shptr<driver>      owner;
 
         devdesc(const char* name, int flags = 0);
         virtual ~devdesc();

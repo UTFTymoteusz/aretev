@@ -10,12 +10,12 @@
 #include "sys/acpi/acpi.hpp"
 
 namespace art::sys {
-    ttydisp*              display;
-    devdesc*              host;
-    u8                    acpirev;
-    vector<sys::devdesc*> devdescs;
-    vector<sys::driver*>  drivers;
-    proc::lock            lock;
+    ttydisp*                    display;
+    shptr<devdesc>              host;
+    u8                          acpirev;
+    vector<shptr<sys::devdesc>> devdescs;
+    vector<shptr<sys::driver>>  drivers;
+    proc::lock                  lock;
 
     void iterate_fdt(void* fdt);
 
@@ -64,7 +64,7 @@ namespace art::sys {
             for (usz i = 0; i < compatible.size - 1; i++)
                 buffer[i] = buffer[i] ?: ';';
 
-            auto devd = new sys::devdesc(child.name);
+            auto devd = mm::share<sys::devdesc>(child.name);
 
             devd->bus    = "main";
             devd->parent = sys::host;
@@ -94,7 +94,7 @@ namespace art::sys {
         iterate_node(parsed, root);
     }
 
-    error_t register_devdesc(sys::devdesc* devd) {
+    error_t register_devdesc(shptr<sys::devdesc> devd) {
         {
             proc::lock_guard lg(lock);
             devdescs.push(devd);
@@ -105,7 +105,7 @@ namespace art::sys {
         return ENONE;
     }
 
-    error_t register_driver(sys::driver* driver) {
+    error_t register_driver(shptr<sys::driver> driver) {
         proc::lock_guard lg(lock);
 
         drivers.push(driver);
@@ -126,7 +126,7 @@ namespace art::sys {
         return ENONE;
     }
 
-    error_t spawn_device(sys::devdesc* devd) {
+    error_t spawn_device(shptr<sys::devdesc> devd) {
         proc::lock_guard lg(lock);
 
         if (devd->owner)

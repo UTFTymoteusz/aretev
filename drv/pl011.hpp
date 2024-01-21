@@ -53,6 +53,6 @@ namespace art {
         public:
         pl011drv();
 
-        error_t spawn(sys::devdesc* dev);
+        error_t spawn(shptr<sys::devdesc> dev);
     };
 }

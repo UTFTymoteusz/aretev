@@ -41,7 +41,11 @@
         "numbers": "cpp",
         "map": "cpp",
         "format": "cpp",
-        "__tree": "cpp"
+        "__tree": "cpp",
+        "cstdlib": "cpp",
+        "__config": "cpp",
+        "thread": "cpp",
+        "__locale": "cpp"
     },
     "C_Cpp.default.includePath": [
         "./",

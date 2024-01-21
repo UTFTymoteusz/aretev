@@ -1,5 +1,6 @@
 #pragma once
 
+#include "art/core.hpp"
 #include "art/dev/types.hpp"
 #include "art/sys/types.hpp"
 
@@ -19,7 +20,7 @@ namespace art::sys {
          * @brief Checks if a devdesc can be accepted by this driver.
          * @return True if the driver can accept this device.
          */
-        bool match(devdesc* devd);
+        bool match(shptr<devdesc> devd);
 
         /**
          * @brief Adds a supported bus to this driver.
@@ -39,7 +40,7 @@ namespace art::sys {
          * @param dev Device descriptor.
          * @return Result error code.
          */
-        virtual error_t spawn(devdesc* devd) = 0;
+        virtual error_t spawn(shptr<devdesc> devd) = 0;
 
         protected:
         private:

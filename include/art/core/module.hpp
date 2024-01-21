@@ -3,7 +3,7 @@
 #include "art/data.hpp"
 #include "art/errno.hpp"
 #include "art/proc.hpp"
-#include "art/util.hpp"
+#include "art/util/vector.hpp"
 
 namespace art {
     struct modsecti {

@@ -9,10 +9,6 @@
 
 #include "mm/boot.hpp"
 
-inline void* operator new(art::usz, void* ptr) {
-    return ptr;
-}
-
 #define section_args(name) (name##_start, name##_end - name##_start)
 
 namespace art::mm::phys {

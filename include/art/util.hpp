@@ -5,7 +5,6 @@
 #include "art/util/cbuf.hpp"
 #include "art/util/llist.hpp"
 #include "art/util/set.hpp"
-#include "art/util/shptr.hpp"
 #include "art/util/vector.hpp"
 
 struct _scopebong {
