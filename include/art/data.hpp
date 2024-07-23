@@ -73,4 +73,13 @@ namespace art {
     constexpr bool find_if_not(T iterable, U matcher) {
         return find_if_not(iterable.begin(), iterable.end(), matcher);
     }
+
+    template <typename T, typename U>
+    constexpr optional<T> find_first_match(T first, T last, U matcher) {
+        for (T val = first; val < last; val++)
+            if (matcher(*val))
+                return val;
+
+        return ENOENT;
+    }
 }

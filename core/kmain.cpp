@@ -33,9 +33,40 @@ namespace art {
         }
     }
 
+    void inset(int amount) {
+        for (int i = 0; i < amount; i++)
+            printk(" ");
+    }
+
+    void iterate(shptr<sys::devdesc> devd, int indent = 0) {
+        inset(indent * 2);
+        printk("./%s\n", devd->name);
+
+        for (auto attribute : devd->attributes) {
+            inset(indent * 2);
+            printk(" - %s: ", attribute->name);
+
+            if (attribute->type == sys::AT_INTEGER)
+                printk("%i\n", attribute->intval);
+            if (attribute->type == sys::AT_STRING)
+                printk("'%s'\n", attribute->stringval);
+            if (attribute->type == sys::AT_REFERENCE)
+                printk("ref %s\n", attribute->reference->name);
+        }
+
+        for (auto possible_child : sys::devdescs) {
+            if (possible_child->parent != devd)
+                continue;
+
+            iterate(possible_child, indent + 1);
+        }
+    }
+
     int kmain(int, char*[]) {
         printk("Entered %s()\n", __func__);
         // image_test(0x800000);
+
+        iterate(sys::host);
 
         cpu::halt();
 

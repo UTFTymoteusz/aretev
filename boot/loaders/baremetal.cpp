@@ -24,8 +24,8 @@ namespace art {
         afx::fdt_getprop(&parsed, &size_cells_pr, &root, "#size-cells");
         afx::fdt_getprop(&parsed, &addr_cells_pr, &root, "#address-cells");
 
-        size_cells = afx::fdt_getu32(&parsed, &size_cells_pr);
-        addr_cells = afx::fdt_getu32(&parsed, &size_cells_pr);
+        size_cells = afx::fdt_getu32(&parsed, &size_cells_pr, 0);
+        addr_cells = afx::fdt_getu32(&parsed, &size_cells_pr, 0);
 
         if (afx::fdt_childnode(&parsed, &memory, &root, "memory", false)) {
             afx::fdt_prop reg;

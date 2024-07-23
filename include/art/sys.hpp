@@ -8,8 +8,9 @@
 
 namespace art::sys {
     extern ttydisp* display; // The ttydisp that represents the framebuffer of the host.
-    extern shptr<devdesc> host;    // The device that represents the local host.
-    extern u8             acpirev; // The revision of the host's ACPI.
+    extern shptr<devdesc>              host; // The device that represents the local host.
+    extern u8                          acpirev;  // The revision of the host's ACPI.
+    extern vector<shptr<sys::devdesc>> devdescs; // Devdesc vector.
 
     /**
      * @brief Gets a discovered ACPI table.

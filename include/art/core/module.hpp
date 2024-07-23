@@ -13,9 +13,9 @@ namespace art {
 
     class kmodule {
         const char* name;
-        int (*init)(int argc, const char* argv[]);
-        void (*exit)();
-        modsecti* sections;
+        int         (*init)(int argc, const char* argv[]);
+        void        (*exit)();
+        modsecti*   sections;
     };
 
     extern proc::lock       module_lock;

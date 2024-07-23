@@ -19,19 +19,6 @@ namespace art {
         this->_io[UARTIMSC]  = 0x7FF;
         this->_io[UARTDMACR] = 0x00;
         this->_io[UARTCR]    = TXE | UARTEN;
-
-        this->_io[UARTDR] = 0xC4;
-        this->_io[UARTDR] = 0x99;
-        this->_io[UARTDR] = 0xC5;
-        this->_io[UARTDR] = 0x9B;
-        this->_io[UARTDR] = 0xC4;
-        this->_io[UARTDR] = 0x85;
-        this->_io[UARTDR] = 0xC4;
-        this->_io[UARTDR] = 0x87;
-        this->_io[UARTDR] = 0xC5;
-        this->_io[UARTDR] = 0xBC;
-        this->_io[UARTDR] = 0x0A;
-        this->_io[UARTDR] = 0x0D;
     }
 
     pl011::~pl011() {}
@@ -72,6 +59,10 @@ namespace art {
     error_t pl011drv::spawn(shptr<sys::devdesc> devd) {
         auto memory = devd->res(0);
         if (!memory.has_value)
+            return EINVAL;
+
+        auto clock = devd->attr("clock0", sys::AT_REFERENCE);
+        if (!clock.has_value)
             return EINVAL;
 
         auto dev = new pl011("tts0", memory.value.start);

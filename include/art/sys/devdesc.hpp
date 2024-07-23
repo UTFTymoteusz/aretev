@@ -5,6 +5,10 @@
 #include "art/proc/lock.hpp"
 #include "art/sys/types.hpp"
 
+namespace art::dev {
+    class device;
+}
+
 namespace art::sys {
     /**
      * @brief A class that represents a physical device.
@@ -25,7 +29,7 @@ namespace art::sys {
 
         attribute*          push(attribute* attr);
         void                push(resource&& attr);
-        optional<attribute> attr(const char* name);
+        optional<attribute> attr(const char* name, enum attrtype type);
         optional<resource>  res(int id);
 
         protected:

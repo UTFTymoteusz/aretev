@@ -13,6 +13,14 @@ namespace art {
     template <typename T>
     class vector {
         public:
+        ~vector() {
+            for (int i = 0; i < this->_count; i++)
+                this->_array[i].~T();
+
+            if (this->_array)
+                delete (char*) this->_array;
+        }
+
         /**
          * @brief Pushes an element to the back of the vector.
          * @param val Element to push.
@@ -21,6 +29,17 @@ namespace art {
             this->_count++;
             this->_array = (T*) mm::realloc(this->_array, this->_count * sizeof(T));
             this->_array[this->_count - 1] = val;
+        }
+
+        /**
+         * @brief Constructs an element at the end of the vector.
+         * @param params Parameters to construct with.
+         */
+        template <typename... A>
+        void emplace(A&&... args) {
+            this->_count++;
+            this->_array = (T*) mm::realloc(this->_array, this->_count * sizeof(T));
+            new (&this->_array[this->_count - 1]) T(args...);
         }
 
         /**

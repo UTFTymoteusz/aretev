@@ -1,12 +1,12 @@
 #pragma once
 
 #include "art/arch/mm.hpp"
-#include "art/core/shptr.hpp"
 #include "art/int.hpp"
 #include "art/mm/heap.hpp"
 #include "art/mm/pagetbl.hpp"
 #include "art/mm/phys.hpp"
 #include "art/mm/segments.hpp"
+#include "art/mm/shptr.hpp"
 
 inline void* operator new(art::usz, void* ptr) {
     return ptr;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "art/int.hpp"
+#include "../int.hpp"
 
 namespace art {
     class shcount {
@@ -72,7 +72,7 @@ namespace art {
 
         template <typename U>
         constexpr operator shptr<U>() {
-            return shptr<U>((U*) this->_val, this->_counter);
+            return shptr<U>(static_cast<U*>(this->_val), this->_counter);
         }
 
         constexpr operator bool() {
@@ -87,6 +87,14 @@ namespace art {
                 this->_counter->inc();
 
             return *this;
+        }
+
+        constexpr bool operator==(const shptr<T>& sp) {
+            return this->_val == sp._val;
+        }
+
+        constexpr bool operator!=(const shptr<T>& sp) {
+            return this->_val != sp._val;
         }
 
         private:

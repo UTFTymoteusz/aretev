@@ -13,9 +13,9 @@ namespace art::sys {
             delete attrib;
     }
 
-    optional<attribute> devdesc::attr(const char* name) {
+    optional<attribute> devdesc::attr(const char* name, enum attrtype type) {
         for (auto attrib : this->attributes) {
-            if (strcmp(attrib->name, name) == 0)
+            if (strcmp(attrib->name, name) == 0 && type == attrib->type)
                 return *attrib;
         }
 

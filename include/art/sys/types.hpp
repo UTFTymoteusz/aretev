@@ -1,5 +1,6 @@
 #pragma once
 
+#include "art/mm/shptr.hpp"
 #include "art/string.hpp"
 
 namespace art::sys {
@@ -37,6 +38,9 @@ namespace art::sys {
         RS_OTHER,
     };
 
+    class devdesc;
+    class driver;
+
     struct attribute {
         char     name[32];
         attrtype type;
@@ -45,7 +49,8 @@ namespace art::sys {
             const char* stringval;
             int         intval;
         };
-        bool strclean = false;
+        shptr<devdesc> reference;
+        bool           strclean = false;
 
         attribute() {
             this->type = AT_INVALID;
@@ -73,6 +78,12 @@ namespace art::sys {
             this->boolval = val;
         }
 
+        attribute(const char* name, shptr<devdesc> devd) : reference(devd) {
+            strlcpy(this->name, name, sizeof(this->name));
+
+            this->type = AT_REFERENCE;
+        }
+
         ~attribute() {
             if (this->strclean)
                 delete stringval;
@@ -91,7 +102,4 @@ namespace art::sys {
             this->end   = end;
         }
     };
-
-    class devdesc;
-    class driver;
 }

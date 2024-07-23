@@ -16,7 +16,7 @@ namespace art::sys {
         if (find_if_not(this->_buses, bus_match))
             return false;
 
-        auto compatible = devd->attr("compatible");
+        auto compatible = devd->attr("compatible", AT_STRING);
         bool matching   = false;
 
         strtok_iterate(
